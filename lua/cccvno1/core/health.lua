@@ -1,7 +1,7 @@
 local M = {}
 
 local required = { "git", "rg", "fd", "fzf" }
-local optional = { "node", "unzip", "codex", "opencode", "tree-sitter" }
+local optional = { "node", "unzip", "codex", "opencode", "tree-sitter", "tmux", "gum", "lazygit", "ws" }
 
 local mason_packages = {
   "lua-language-server",
@@ -112,6 +112,28 @@ local function check_mason()
   end
 end
 
+local function check_treesitter()
+  if not lazy_plugin("tree-sitter-manager.nvim") then
+    vim.health.warn("tree-sitter-manager.nvim is not configured in lazy.nvim")
+    return
+  end
+  vim.health.ok("tree-sitter-manager.nvim configured")
+
+  local ts = safe_require("cccvno1.core.treesitter")
+  if not ts then
+    vim.health.warn("cccvno1.core.treesitter unavailable")
+    return
+  end
+
+  for _, parser in ipairs(ts.parsers) do
+    if pcall(vim.treesitter.language.inspect, parser) then
+      vim.health.ok("Tree-sitter parser installed: " .. parser)
+    else
+      vim.health.warn("Tree-sitter parser missing: " .. parser)
+    end
+  end
+end
+
 local function check_dap()
   local dap = check_configured_plugin("nvim-dap", "dap")
   if dap and type(dap.adapters) == "table" then
@@ -216,7 +238,7 @@ local function check_sidekick()
 end
 
 function M.check()
-  vim.health.start("ad.nvim")
+  vim.health.start("cccvno1.nvim")
   vim.health.info("Neovim " .. tostring(vim.version()))
   for _, cmd in ipairs(required) do
     check_cmd(cmd, true)
@@ -227,6 +249,7 @@ function M.check()
 
   check_lazy()
   check_mason()
+  check_treesitter()
   check_dap()
   check_copilot()
   check_sidekick()

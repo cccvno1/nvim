@@ -5,6 +5,7 @@ return {
     dependencies = { "echasnovski/mini.icons" },
     opts = {
       enabled = true,
+      latex = { enabled = false },
       ignore = function(buf)
         return vim.b[buf].bigfile == true
       end,

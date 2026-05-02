@@ -160,7 +160,10 @@ install_mason_tools() {
   run nvim --headless "+Lazy! sync" +qa
 
   log "Installing Mason tools declared by this config"
-  run nvim --headless "+MasonToolsInstall" +qa
+  run nvim --headless "+MasonToolsInstallSync" +qa
+
+  log "Installing Tree-sitter parsers declared by this config"
+  run nvim --headless "+lua require('lazy').load({ plugins = { 'tree-sitter-manager.nvim' } }); local ts = require('cccvno1.core.treesitter'); local ok = vim.wait(180000, function() return #ts.missing() == 0 end, 200); assert(ok, 'Tree-sitter parser installation timed out: ' .. table.concat(ts.missing(), ', '))" +qa
 }
 
 print_summary() {
@@ -185,7 +188,7 @@ main() {
   print_summary
 
   log "Next checks"
-  printf '  nvim --headless "+checkhealth ad" +qa\n'
+  printf '  nvim --headless "+checkhealth cccvno1" +qa\n'
   printf '  find lua -name '"'"'*.lua'"'"' -print0 | xargs -0 luac -p\n'
 }
 

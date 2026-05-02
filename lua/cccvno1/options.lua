@@ -1,5 +1,20 @@
 local opt = vim.opt
 
+local has_clipboard_tool = vim.fn.executable("wl-copy") == 1
+  or vim.fn.executable("xclip") == 1
+  or vim.fn.executable("xsel") == 1
+  or vim.fn.executable("pbcopy") == 1
+  or vim.fn.executable("win32yank.exe") == 1
+
+if not has_clipboard_tool then
+  vim.g.clipboard = "osc52"
+end
+
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+
 opt.autowrite = true
 opt.breakindent = true
 opt.clipboard = "unnamedplus"

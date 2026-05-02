@@ -4,7 +4,7 @@
 
 **Goal:** Build the approved AI-first Neovim workbench from `docs/superpowers/specs/2026-04-29-ai-neovim-workbench-design.md`.
 
-**Architecture:** The config is split into small `lua/ad/core/*`, `lua/ad/ai/*`, and `lua/ad/plugins/*` modules. Mature plugins provide editor features; local modules provide bigfile policy, health checks, buffer wrappers, root helpers, and Sidekick context extensions.
+**Architecture:** The config is split into small `lua/cccvno1/core/*`, `lua/cccvno1/ai/*`, and `lua/cccvno1/plugins/*` modules. Mature plugins provide editor features; local modules provide bigfile policy, health checks, buffer wrappers, root helpers, and Sidekick context extensions.
 
 **Tech Stack:** Neovim 0.12, Lua, lazy.nvim, Mason, native LSP, blink.cmp, Copilot, Sidekick, fzf-lua, Oil, Aerial, barbar.nvim, gitsigns, neogit, codediff.nvim, nvim-dap, neotest, Overseer, render-markdown, live-preview, Kanagawa.
 
@@ -17,19 +17,19 @@ This is one cohesive configuration project. It touches multiple subsystems, but 
 ## File Map
 
 - Create `init.lua`: entrypoint, leader setup, module loading, lazy setup.
-- Create `lua/ad/bootstrap.lua`: lazy.nvim bootstrap.
-- Create `lua/ad/options.lua`: editor options.
-- Create `lua/ad/autocmds.lua`: general autocmds.
-- Create `lua/ad/keymaps.lua`: global keymaps only.
-- Create `lua/ad/plugins/init.lua`: imports all plugin spec modules.
-- Create `lua/ad/plugins/*.lua`: focused plugin specs by feature area.
-- Create `lua/ad/core/bigfile.lua`: large-file detection and downgrade event.
-- Create `lua/ad/core/buffers.lua`: wrappers around barbar/fzf buffer actions.
-- Create `lua/ad/core/health.lua`: local health checks.
-- Create `lua/ad/core/root.lua`: project root detection helpers.
-- Create `lua/ad/core/ui.lua`: shared icons and small UI helpers.
-- Create `lua/ad/ai/sidekick.lua`: Sidekick custom context setup.
-- Create `lua/ad/ai/contexts/*.lua`: git, review, debug, test, task, and outline context renderers.
+- Create `lua/cccvno1/bootstrap.lua`: lazy.nvim bootstrap.
+- Create `lua/cccvno1/options.lua`: editor options.
+- Create `lua/cccvno1/autocmds.lua`: general autocmds.
+- Create `lua/cccvno1/keymaps.lua`: global keymaps only.
+- Create `lua/cccvno1/plugins/init.lua`: imports all plugin spec modules.
+- Create `lua/cccvno1/plugins/*.lua`: focused plugin specs by feature area.
+- Create `lua/cccvno1/core/bigfile.lua`: large-file detection and downgrade event.
+- Create `lua/cccvno1/core/buffers.lua`: wrappers around barbar/fzf buffer actions.
+- Create `lua/cccvno1/core/health.lua`: local health checks.
+- Create `lua/cccvno1/core/root.lua`: project root detection helpers.
+- Create `lua/cccvno1/core/ui.lua`: shared icons and small UI helpers.
+- Create `lua/cccvno1/ai/sidekick.lua`: Sidekick custom context setup.
+- Create `lua/cccvno1/ai/contexts/*.lua`: git, review, debug, test, task, and outline context renderers.
 
 ## Common Commands
 
@@ -39,7 +39,7 @@ Run these from `/home/chenchi/.config/nvim`.
 - Startup smoke test: `nvim --headless "+lua print('ok')" +qa`
 - Plugin sync: `nvim --headless "+Lazy! sync" +qa`
 - Health: `nvim --headless "+checkhealth" +qa`
-- Lua load test: `nvim --headless "+lua require('ad.core.bigfile')" +qa`
+- Lua load test: `nvim --headless "+lua require('cccvno1.core.bigfile')" +qa`
 - Git status: `git status --short`
 
 If `stylua` is missing, skip formatting and record that in the task notes. Do not install system packages from this plan.
@@ -50,11 +50,11 @@ If `stylua` is missing, skip formatting and record that in the task notes. Do no
 
 **Files:**
 - Create: `init.lua`
-- Create: `lua/ad/bootstrap.lua`
-- Create: `lua/ad/options.lua`
-- Create: `lua/ad/autocmds.lua`
-- Create: `lua/ad/keymaps.lua`
-- Create: `lua/ad/plugins/init.lua`
+- Create: `lua/cccvno1/bootstrap.lua`
+- Create: `lua/cccvno1/options.lua`
+- Create: `lua/cccvno1/autocmds.lua`
+- Create: `lua/cccvno1/keymaps.lua`
+- Create: `lua/cccvno1/plugins/init.lua`
 
 - [ ] **Step 1: Create the entrypoint**
 
@@ -64,13 +64,13 @@ Create `init.lua`:
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-require("ad.bootstrap")
-require("ad.options")
-require("ad.autocmds")
-require("ad.keymaps")
+require("cccvno1.bootstrap")
+require("cccvno1.options")
+require("cccvno1.autocmds")
+require("cccvno1.keymaps")
 
 require("lazy").setup({
-  { import = "ad.plugins" },
+  { import = "cccvno1.plugins" },
 }, {
   checker = { enabled = true, notify = false },
   change_detection = { notify = false },
@@ -95,7 +95,7 @@ require("lazy").setup({
 
 - [ ] **Step 2: Create lazy.nvim bootstrap**
 
-Create `lua/ad/bootstrap.lua`:
+Create `lua/cccvno1/bootstrap.lua`:
 
 ```lua
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -120,7 +120,7 @@ vim.opt.rtp:prepend(lazypath)
 
 - [ ] **Step 3: Create editor options**
 
-Create `lua/ad/options.lua`:
+Create `lua/cccvno1/options.lua`:
 
 ```lua
 local opt = vim.opt
@@ -172,10 +172,10 @@ vim.g.loaded_netrwPlugin = 1
 
 - [ ] **Step 4: Create general autocmds**
 
-Create `lua/ad/autocmds.lua`:
+Create `lua/cccvno1/autocmds.lua`:
 
 ```lua
-local augroup = vim.api.nvim_create_augroup("ad_core", { clear = true })
+local augroup = vim.api.nvim_create_augroup("cccvno1_core", { clear = true })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = augroup,
@@ -206,7 +206,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 - [ ] **Step 5: Create global keymap shell**
 
-Create `lua/ad/keymaps.lua`:
+Create `lua/cccvno1/keymaps.lua`:
 
 ```lua
 local map = vim.keymap.set
@@ -221,35 +221,35 @@ map("n", "]l", "<cmd>lnext<cr>", { desc = "Next location item" })
 
 - [ ] **Step 6: Create plugin import list**
 
-Create `lua/ad/plugins/init.lua`:
+Create `lua/cccvno1/plugins/init.lua`:
 
 ```lua
 return {
-  { import = "ad.plugins.ui" },
-  { import = "ad.plugins.picker" },
-  { import = "ad.plugins.buffer" },
-  { import = "ad.plugins.editor" },
-  { import = "ad.plugins.treesitter" },
-  { import = "ad.plugins.lsp" },
-  { import = "ad.plugins.cmp" },
-  { import = "ad.plugins.git" },
-  { import = "ad.plugins.ai" },
-  { import = "ad.plugins.dap" },
-  { import = "ad.plugins.test" },
-  { import = "ad.plugins.markdown" },
+  { import = "cccvno1.plugins.ui" },
+  { import = "cccvno1.plugins.picker" },
+  { import = "cccvno1.plugins.buffer" },
+  { import = "cccvno1.plugins.editor" },
+  { import = "cccvno1.plugins.treesitter" },
+  { import = "cccvno1.plugins.lsp" },
+  { import = "cccvno1.plugins.cmp" },
+  { import = "cccvno1.plugins.git" },
+  { import = "cccvno1.plugins.ai" },
+  { import = "cccvno1.plugins.dap" },
+  { import = "cccvno1.plugins.test" },
+  { import = "cccvno1.plugins.markdown" },
 }
 ```
 
 - [ ] **Step 7: Verify skeleton load**
 
-Run: `nvim --headless "+lua print('ad skeleton ok')" +qa`
+Run: `nvim --headless "+lua print('cccvno1 skeleton ok')" +qa`
 
-Expected: command exits 0 and prints `ad skeleton ok`.
+Expected: command exits 0 and prints `cccvno1 skeleton ok`.
 
 - [ ] **Step 8: Commit skeleton**
 
 ```bash
-git add init.lua lua/ad/bootstrap.lua lua/ad/options.lua lua/ad/autocmds.lua lua/ad/keymaps.lua lua/ad/plugins/init.lua
+git add init.lua lua/cccvno1/bootstrap.lua lua/cccvno1/options.lua lua/cccvno1/autocmds.lua lua/cccvno1/keymaps.lua lua/cccvno1/plugins/init.lua
 git commit -m "feat: bootstrap neovim workbench skeleton"
 ```
 
@@ -258,16 +258,16 @@ git commit -m "feat: bootstrap neovim workbench skeleton"
 ### Task 2: Core Modules
 
 **Files:**
-- Create: `lua/ad/core/root.lua`
-- Create: `lua/ad/core/bigfile.lua`
-- Create: `lua/ad/core/buffers.lua`
-- Create: `lua/ad/core/health.lua`
-- Create: `lua/ad/core/ui.lua`
-- Modify: `lua/ad/autocmds.lua`
+- Create: `lua/cccvno1/core/root.lua`
+- Create: `lua/cccvno1/core/bigfile.lua`
+- Create: `lua/cccvno1/core/buffers.lua`
+- Create: `lua/cccvno1/core/health.lua`
+- Create: `lua/cccvno1/core/ui.lua`
+- Modify: `lua/cccvno1/autocmds.lua`
 
 - [ ] **Step 1: Create root helper**
 
-Create `lua/ad/core/root.lua`:
+Create `lua/cccvno1/core/root.lua`:
 
 ```lua
 local M = {}
@@ -295,7 +295,7 @@ return M
 
 - [ ] **Step 2: Create bigfile module**
 
-Create `lua/ad/core/bigfile.lua`:
+Create `lua/cccvno1/core/bigfile.lua`:
 
 ```lua
 local M = {}
@@ -362,7 +362,7 @@ function M.apply(bufnr)
 end
 
 function M.setup()
-  local group = vim.api.nvim_create_augroup("ad_bigfile", { clear = true })
+  local group = vim.api.nvim_create_augroup("cccvno1_bigfile", { clear = true })
   vim.api.nvim_create_autocmd("BufReadPost", {
     group = group,
     callback = function(event)
@@ -382,7 +382,7 @@ return M
 
 - [ ] **Step 3: Create buffer wrappers**
 
-Create `lua/ad/core/buffers.lua`:
+Create `lua/cccvno1/core/buffers.lua`:
 
 ```lua
 local M = {}
@@ -410,7 +410,7 @@ return M
 
 - [ ] **Step 4: Create UI helper**
 
-Create `lua/ad/core/ui.lua`:
+Create `lua/cccvno1/core/ui.lua`:
 
 ```lua
 local M = {}
@@ -438,7 +438,7 @@ return M
 
 - [ ] **Step 5: Create health checks**
 
-Create `lua/ad/core/health.lua`:
+Create `lua/cccvno1/core/health.lua`:
 
 ```lua
 local M = {}
@@ -461,7 +461,7 @@ local function check_cmd(cmd, required_cmd)
 end
 
 function M.check()
-  vim.health.start("ad.nvim")
+  vim.health.start("cccvno1.nvim")
   vim.health.info("Neovim " .. tostring(vim.version()))
   for _, cmd in ipairs(required) do
     check_cmd(cmd, true)
@@ -483,16 +483,16 @@ return M
 
 - [ ] **Step 6: Register core modules**
 
-Append this line to the end of `lua/ad/autocmds.lua`:
+Append this line to the end of `lua/cccvno1/autocmds.lua`:
 
 ```lua
-require("ad.core.bigfile").setup()
+require("cccvno1.core.bigfile").setup()
 ```
 
-Create `lua/ad/health.lua`:
+Create `lua/cccvno1/health.lua`:
 
 ```lua
-return require("ad.core.health")
+return require("cccvno1.core.health")
 ```
 
 - [ ] **Step 7: Verify core modules**
@@ -500,7 +500,7 @@ return require("ad.core.health")
 Run:
 
 ```bash
-nvim --headless "+lua require('ad.core.bigfile'); require('ad.core.root'); require('ad.core.buffers'); require('ad.core.health'); print('core ok')" +qa
+nvim --headless "+lua require('cccvno1.core.bigfile'); require('cccvno1.core.root'); require('cccvno1.core.buffers'); require('cccvno1.core.health'); print('core ok')" +qa
 ```
 
 Expected: exits 0 and prints `core ok`.
@@ -508,7 +508,7 @@ Expected: exits 0 and prints `core ok`.
 - [ ] **Step 8: Commit core modules**
 
 ```bash
-git add lua/ad/core lua/ad/autocmds.lua lua/ad/health.lua
+git add lua/cccvno1/core lua/cccvno1/autocmds.lua lua/cccvno1/health.lua
 git commit -m "feat: add core workbench modules"
 ```
 
@@ -517,15 +517,15 @@ git commit -m "feat: add core workbench modules"
 ### Task 3: UI, Picker, Files, Buffer, and Editing Plugins
 
 **Files:**
-- Create: `lua/ad/plugins/ui.lua`
-- Create: `lua/ad/plugins/picker.lua`
-- Create: `lua/ad/plugins/buffer.lua`
-- Create: `lua/ad/plugins/editor.lua`
-- Modify: `lua/ad/keymaps.lua`
+- Create: `lua/cccvno1/plugins/ui.lua`
+- Create: `lua/cccvno1/plugins/picker.lua`
+- Create: `lua/cccvno1/plugins/buffer.lua`
+- Create: `lua/cccvno1/plugins/editor.lua`
+- Modify: `lua/cccvno1/keymaps.lua`
 
 - [ ] **Step 1: Create UI plugin spec**
 
-Create `lua/ad/plugins/ui.lua`:
+Create `lua/cccvno1/plugins/ui.lua`:
 
 ```lua
 return {
@@ -557,7 +557,7 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     opts = function()
-      local ui = require("ad.core.ui")
+      local ui = require("cccvno1.core.ui")
       return {
         options = {
           theme = "kanagawa",
@@ -586,7 +586,7 @@ return {
 
 - [ ] **Step 2: Create picker and file plugin spec**
 
-Create `lua/ad/plugins/picker.lua`:
+Create `lua/cccvno1/plugins/picker.lua`:
 
 ```lua
 return {
@@ -619,7 +619,7 @@ return {
 
 - [ ] **Step 3: Create buffer plugin spec**
 
-Create `lua/ad/plugins/buffer.lua`:
+Create `lua/cccvno1/plugins/buffer.lua`:
 
 ```lua
 return {
@@ -664,7 +664,7 @@ return {
 
 - [ ] **Step 4: Create editing plugin spec**
 
-Create `lua/ad/plugins/editor.lua`:
+Create `lua/cccvno1/plugins/editor.lua`:
 
 ```lua
 return {
@@ -692,17 +692,17 @@ return {
 
 - [ ] **Step 5: Add global navigation keymaps**
 
-Append to `lua/ad/keymaps.lua`:
+Append to `lua/cccvno1/keymaps.lua`:
 
 ```lua
 map("n", "<leader>ff", function() require("fzf-lua").files() end, { desc = "Find files" })
 map("n", "<leader>fg", function() require("fzf-lua").live_grep() end, { desc = "Live grep" })
-map("n", "<leader>fb", function() require("ad.core.buffers").find() end, { desc = "Find buffers" })
+map("n", "<leader>fb", function() require("cccvno1.core.buffers").find() end, { desc = "Find buffers" })
 map("n", "<leader>e", "<cmd>Oil<cr>", { desc = "Open Oil" })
 map("n", "<leader>sr", "<cmd>GrugFar<cr>", { desc = "Search and replace" })
-map("n", "<leader>bd", function() require("ad.core.buffers").close() end, { desc = "Close buffer" })
-map("n", "<leader>bo", function() require("ad.core.buffers").close_others() end, { desc = "Close other buffers" })
-map("n", "<leader>bp", function() require("ad.core.buffers").pin() end, { desc = "Pin buffer" })
+map("n", "<leader>bd", function() require("cccvno1.core.buffers").close() end, { desc = "Close buffer" })
+map("n", "<leader>bo", function() require("cccvno1.core.buffers").close_others() end, { desc = "Close other buffers" })
+map("n", "<leader>bp", function() require("cccvno1.core.buffers").pin() end, { desc = "Pin buffer" })
 map({ "n", "x", "o" }, "s", function() require("flash").jump() end, { desc = "Flash jump" })
 ```
 
@@ -719,7 +719,7 @@ Expected: exits 0 and prints `ui layer ok`.
 - [ ] **Step 7: Commit UI and navigation layer**
 
 ```bash
-git add lua/ad/plugins/ui.lua lua/ad/plugins/picker.lua lua/ad/plugins/buffer.lua lua/ad/plugins/editor.lua lua/ad/keymaps.lua lazy-lock.json
+git add lua/cccvno1/plugins/ui.lua lua/cccvno1/plugins/picker.lua lua/cccvno1/plugins/buffer.lua lua/cccvno1/plugins/editor.lua lua/cccvno1/keymaps.lua lazy-lock.json
 git commit -m "feat: add ui navigation and buffer plugins"
 ```
 
@@ -728,27 +728,27 @@ git commit -m "feat: add ui navigation and buffer plugins"
 ### Task 4: Treesitter, LSP, Completion, Format, and Lint
 
 **Files:**
-- Create: `lua/ad/plugins/treesitter.lua`
-- Create: `lua/ad/plugins/lsp.lua`
-- Create: `lua/ad/plugins/cmp.lua`
+- Create: `lua/cccvno1/plugins/treesitter.lua`
+- Create: `lua/cccvno1/plugins/lsp.lua`
+- Create: `lua/cccvno1/plugins/cmp.lua`
 
 - [ ] **Step 1: Verify current plugin APIs before writing config**
 
 Run:
 
 ```bash
-mkdir -p /tmp/ad-nvim-api-check
-git clone --depth 1 https://github.com/romus204/tree-sitter-manager.nvim.git /tmp/ad-nvim-api-check/tree-sitter-manager.nvim
-git clone --depth 1 https://github.com/saghen/blink.cmp.git /tmp/ad-nvim-api-check/blink.cmp
-git clone --depth 1 https://github.com/fang2hou/blink-copilot.git /tmp/ad-nvim-api-check/blink-copilot
-rg -n "setup|vim.lsp.config|providers|module = \"blink-copilot\"|tree-sitter-manager" /tmp/ad-nvim-api-check
+mkdir -p /tmp/cccvno1-nvim-api-check
+git clone --depth 1 https://github.com/romus204/tree-sitter-manager.nvim.git /tmp/cccvno1-nvim-api-check/tree-sitter-manager.nvim
+git clone --depth 1 https://github.com/saghen/blink.cmp.git /tmp/cccvno1-nvim-api-check/blink.cmp
+git clone --depth 1 https://github.com/fang2hou/blink-copilot.git /tmp/cccvno1-nvim-api-check/blink-copilot
+rg -n "setup|vim.lsp.config|providers|module = \"blink-copilot\"|tree-sitter-manager" /tmp/cccvno1-nvim-api-check
 ```
 
 Expected: output includes setup examples for `tree-sitter-manager.nvim`, `blink.cmp`, and `blink-copilot`. If any repo no longer exposes those names, stop this task and revise the plugin spec before editing files.
 
 - [ ] **Step 2: Create Treesitter spec**
 
-Create `lua/ad/plugins/treesitter.lua`:
+Create `lua/cccvno1/plugins/treesitter.lua`:
 
 ```lua
 return {
@@ -769,7 +769,7 @@ return {
 
 - [ ] **Step 3: Create LSP, Mason, format, and lint spec**
 
-Create `lua/ad/plugins/lsp.lua`:
+Create `lua/cccvno1/plugins/lsp.lua`:
 
 ```lua
 local servers = {
@@ -823,7 +823,7 @@ return {
       end
 
       vim.api.nvim_create_autocmd("LspAttach", {
-        group = vim.api.nvim_create_augroup("ad_lsp_attach", { clear = true }),
+        group = vim.api.nvim_create_augroup("cccvno1_lsp_attach", { clear = true }),
         callback = function(event)
           if vim.b[event.buf].bigfile then
             local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -878,7 +878,7 @@ return {
         sh = { "shellcheck" },
       }
       vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
-        group = vim.api.nvim_create_augroup("ad_lint", { clear = true }),
+        group = vim.api.nvim_create_augroup("cccvno1_lint", { clear = true }),
         callback = function(event)
           if not vim.b[event.buf].bigfile then
             lint.try_lint()
@@ -892,7 +892,7 @@ return {
 
 - [ ] **Step 4: Create completion and Copilot spec**
 
-Create `lua/ad/plugins/cmp.lua`:
+Create `lua/cccvno1/plugins/cmp.lua`:
 
 ```lua
 return {
@@ -957,7 +957,7 @@ Expected: exits 0 and prints `language layer ok`.
 - [ ] **Step 6: Commit language layer**
 
 ```bash
-git add lua/ad/plugins/treesitter.lua lua/ad/plugins/lsp.lua lua/ad/plugins/cmp.lua lazy-lock.json
+git add lua/cccvno1/plugins/treesitter.lua lua/cccvno1/plugins/lsp.lua lua/cccvno1/plugins/cmp.lua lazy-lock.json
 git commit -m "feat: add language tooling and completion"
 ```
 
@@ -966,13 +966,13 @@ git commit -m "feat: add language tooling and completion"
 ### Task 5: Git, Review, Outline, Diagnostics, and Quickfix
 
 **Files:**
-- Create: `lua/ad/plugins/git.lua`
-- Modify: `lua/ad/plugins/picker.lua`
-- Modify: `lua/ad/keymaps.lua`
+- Create: `lua/cccvno1/plugins/git.lua`
+- Modify: `lua/cccvno1/plugins/picker.lua`
+- Modify: `lua/cccvno1/keymaps.lua`
 
 - [ ] **Step 1: Create git and review plugin spec**
 
-Create `lua/ad/plugins/git.lua`:
+Create `lua/cccvno1/plugins/git.lua`:
 
 ```lua
 return {
@@ -1023,8 +1023,8 @@ return {
     opts = function()
       return {
         backends = { "lsp", "treesitter", "markdown", "man" },
-        disable_max_lines = require("ad.core.bigfile").defaults.lines,
-        disable_max_size = require("ad.core.bigfile").defaults.size,
+        disable_max_lines = require("cccvno1.core.bigfile").defaults.lines,
+        disable_max_size = require("cccvno1.core.bigfile").defaults.size,
       }
     end,
   },
@@ -1038,7 +1038,7 @@ return {
 
 - [ ] **Step 2: Add review keymaps**
 
-Append to `lua/ad/keymaps.lua`:
+Append to `lua/cccvno1/keymaps.lua`:
 
 ```lua
 map("n", "<leader>gg", "<cmd>Neogit<cr>", { desc = "Neogit" })
@@ -1065,7 +1065,7 @@ Expected: exits 0 and prints `review layer ok`.
 - [ ] **Step 4: Commit review layer**
 
 ```bash
-git add lua/ad/plugins/git.lua lua/ad/keymaps.lua lazy-lock.json
+git add lua/cccvno1/plugins/git.lua lua/cccvno1/keymaps.lua lazy-lock.json
 git commit -m "feat: add git review and outline tools"
 ```
 
@@ -1074,30 +1074,30 @@ git commit -m "feat: add git review and outline tools"
 ### Task 6: Sidekick and AI Contexts
 
 **Files:**
-- Create: `lua/ad/plugins/ai.lua`
-- Create: `lua/ad/ai/sidekick.lua`
-- Create: `lua/ad/ai/contexts/git.lua`
-- Create: `lua/ad/ai/contexts/outline.lua`
-- Create: `lua/ad/ai/contexts/test.lua`
-- Create: `lua/ad/ai/contexts/debug.lua`
-- Create: `lua/ad/ai/contexts/review.lua`
-- Modify: `lua/ad/keymaps.lua`
+- Create: `lua/cccvno1/plugins/ai.lua`
+- Create: `lua/cccvno1/ai/sidekick.lua`
+- Create: `lua/cccvno1/ai/contexts/git.lua`
+- Create: `lua/cccvno1/ai/contexts/outline.lua`
+- Create: `lua/cccvno1/ai/contexts/test.lua`
+- Create: `lua/cccvno1/ai/contexts/debug.lua`
+- Create: `lua/cccvno1/ai/contexts/review.lua`
+- Modify: `lua/cccvno1/keymaps.lua`
 
 - [ ] **Step 1: Verify current Sidekick context API**
 
 Run:
 
 ```bash
-mkdir -p /tmp/ad-nvim-api-check
-git clone --depth 1 https://github.com/folke/sidekick.nvim.git /tmp/ad-nvim-api-check/sidekick.nvim
-rg -n "context = \\{|prompts = \\{|picker =|mux =|function M.fn|sidekick.context.Fn" /tmp/ad-nvim-api-check/sidekick.nvim/lua /tmp/ad-nvim-api-check/sidekick.nvim/sk
+mkdir -p /tmp/cccvno1-nvim-api-check
+git clone --depth 1 https://github.com/folke/sidekick.nvim.git /tmp/cccvno1-nvim-api-check/sidekick.nvim
+rg -n "context = \\{|prompts = \\{|picker =|mux =|function M.fn|sidekick.context.Fn" /tmp/cccvno1-nvim-api-check/sidekick.nvim/lua /tmp/cccvno1-nvim-api-check/sidekick.nvim/sk
 ```
 
-Expected: output shows `cli.context`, `cli.prompts`, `cli.picker`, and `cli.mux.enabled`. If those names are absent, stop this task and revise `lua/ad/ai/sidekick.lua` against current source.
+Expected: output shows `cli.context`, `cli.prompts`, `cli.picker`, and `cli.mux.enabled`. If those names are absent, stop this task and revise `lua/cccvno1/ai/sidekick.lua` against current source.
 
 - [ ] **Step 2: Create git context renderer**
 
-Create `lua/ad/ai/contexts/git.lua`:
+Create `lua/cccvno1/ai/contexts/git.lua`:
 
 ```lua
 local M = {}
@@ -1136,7 +1136,7 @@ return M
 
 - [ ] **Step 3: Create outline context renderer**
 
-Create `lua/ad/ai/contexts/outline.lua`:
+Create `lua/cccvno1/ai/contexts/outline.lua`:
 
 ```lua
 local M = {}
@@ -1166,7 +1166,7 @@ return M
 
 - [ ] **Step 4: Create test context renderer**
 
-Create `lua/ad/ai/contexts/test.lua`:
+Create `lua/cccvno1/ai/contexts/test.lua`:
 
 ```lua
 local M = { last_output = nil }
@@ -1187,7 +1187,7 @@ return M
 
 - [ ] **Step 5: Create debug context renderer**
 
-Create `lua/ad/ai/contexts/debug.lua`:
+Create `lua/cccvno1/ai/contexts/debug.lua`:
 
 ```lua
 local M = {}
@@ -1236,7 +1236,7 @@ function M.debug_pack()
     "",
     M.task_output(),
     "",
-    require("ad.ai.contexts.test").render(),
+    require("cccvno1.ai.contexts.test").render(),
   }, "\n")
 end
 
@@ -1245,7 +1245,7 @@ return M
 
 - [ ] **Step 6: Create review context renderer**
 
-Create `lua/ad/ai/contexts/review.lua`:
+Create `lua/cccvno1/ai/contexts/review.lua`:
 
 ```lua
 local M = {}
@@ -1266,13 +1266,13 @@ end
 
 function M.render()
   return table.concat({
-    require("ad.ai.contexts.git").changed(),
+    require("cccvno1.ai.contexts.git").changed(),
     "",
-    require("ad.ai.contexts.git").diff(),
+    require("cccvno1.ai.contexts.git").diff(),
     "",
     diagnostics(),
     "",
-    require("ad.ai.contexts.outline").render(),
+    require("cccvno1.ai.contexts.outline").render(),
   }, "\n")
 end
 
@@ -1281,7 +1281,7 @@ return M
 
 - [ ] **Step 7: Create Sidekick setup**
 
-Create `lua/ad/ai/sidekick.lua`:
+Create `lua/cccvno1/ai/sidekick.lua`:
 
 ```lua
 local M = {}
@@ -1293,28 +1293,28 @@ function M.setup()
       mux = { enabled = false },
       context = {
         git_changed = function()
-          return require("ad.ai.contexts.git").changed()
+          return require("cccvno1.ai.contexts.git").changed()
         end,
         git_diff = function()
-          return require("ad.ai.contexts.git").diff()
+          return require("cccvno1.ai.contexts.git").diff()
         end,
         outline = function()
-          return require("ad.ai.contexts.outline").render()
+          return require("cccvno1.ai.contexts.outline").render()
         end,
         review_pack = function()
-          return require("ad.ai.contexts.review").render()
+          return require("cccvno1.ai.contexts.review").render()
         end,
         dap_state = function()
-          return require("ad.ai.contexts.debug").dap_state()
+          return require("cccvno1.ai.contexts.debug").dap_state()
         end,
         test_output = function()
-          return require("ad.ai.contexts.test").render()
+          return require("cccvno1.ai.contexts.test").render()
         end,
         task_output = function()
-          return require("ad.ai.contexts.debug").task_output()
+          return require("cccvno1.ai.contexts.debug").task_output()
         end,
         debug_pack = function()
-          return require("ad.ai.contexts.debug").debug_pack()
+          return require("cccvno1.ai.contexts.debug").debug_pack()
         end,
       },
       prompts = {
@@ -1330,7 +1330,7 @@ return M
 
 - [ ] **Step 8: Create AI plugin spec**
 
-Create `lua/ad/plugins/ai.lua`:
+Create `lua/cccvno1/plugins/ai.lua`:
 
 ```lua
 return {
@@ -1342,7 +1342,7 @@ return {
       "ibhagwan/fzf-lua",
     },
     config = function()
-      require("ad.ai.sidekick").setup()
+      require("cccvno1.ai.sidekick").setup()
     end,
   },
 }
@@ -1350,7 +1350,7 @@ return {
 
 - [ ] **Step 9: Add AI keymaps**
 
-Append to `lua/ad/keymaps.lua`:
+Append to `lua/cccvno1/keymaps.lua`:
 
 ```lua
 map("n", "<leader>ar", "<cmd>Sidekick review_pack<cr>", { desc = "AI review pack" })
@@ -1367,7 +1367,7 @@ Expected: exits 0 and installs Sidekick.
 Run:
 
 ```bash
-nvim --headless "+lua require('ad.ai.contexts.git').changed(); require('ad.ai.contexts.review').render(); print('ai contexts ok')" +qa
+nvim --headless "+lua require('cccvno1.ai.contexts.git').changed(); require('cccvno1.ai.contexts.review').render(); print('ai contexts ok')" +qa
 ```
 
 Expected: exits 0 and prints `ai contexts ok`.
@@ -1375,7 +1375,7 @@ Expected: exits 0 and prints `ai contexts ok`.
 - [ ] **Step 11: Commit AI layer**
 
 ```bash
-git add lua/ad/plugins/ai.lua lua/ad/ai lua/ad/keymaps.lua lazy-lock.json
+git add lua/cccvno1/plugins/ai.lua lua/cccvno1/ai lua/cccvno1/keymaps.lua lazy-lock.json
 git commit -m "feat: add sidekick ai context workflow"
 ```
 
@@ -1384,13 +1384,13 @@ git commit -m "feat: add sidekick ai context workflow"
 ### Task 7: DAP, Tests, and Tasks
 
 **Files:**
-- Create: `lua/ad/plugins/dap.lua`
-- Create: `lua/ad/plugins/test.lua`
-- Modify: `lua/ad/keymaps.lua`
+- Create: `lua/cccvno1/plugins/dap.lua`
+- Create: `lua/cccvno1/plugins/test.lua`
+- Modify: `lua/cccvno1/keymaps.lua`
 
 - [ ] **Step 1: Create DAP plugin spec**
 
-Create `lua/ad/plugins/dap.lua`:
+Create `lua/cccvno1/plugins/dap.lua`:
 
 ```lua
 return {
@@ -1441,7 +1441,7 @@ return {
 
 - [ ] **Step 2: Create test and task plugin spec**
 
-Create `lua/ad/plugins/test.lua`:
+Create `lua/cccvno1/plugins/test.lua`:
 
 ```lua
 return {
@@ -1481,7 +1481,7 @@ return {
 
 - [ ] **Step 3: Add DAP and test keymaps**
 
-Append to `lua/ad/keymaps.lua`:
+Append to `lua/cccvno1/keymaps.lua`:
 
 ```lua
 map("n", "<F5>", function() require("dap").continue() end, { desc = "DAP continue" })
@@ -1514,7 +1514,7 @@ Expected: exits 0 and prints `debug test layer ok`.
 - [ ] **Step 5: Commit debug/test layer**
 
 ```bash
-git add lua/ad/plugins/dap.lua lua/ad/plugins/test.lua lua/ad/keymaps.lua lazy-lock.json
+git add lua/cccvno1/plugins/dap.lua lua/cccvno1/plugins/test.lua lua/cccvno1/keymaps.lua lazy-lock.json
 git commit -m "feat: add debug test and task workflow"
 ```
 
@@ -1523,12 +1523,12 @@ git commit -m "feat: add debug test and task workflow"
 ### Task 8: Markdown and Documentation Preview
 
 **Files:**
-- Create: `lua/ad/plugins/markdown.lua`
-- Modify: `lua/ad/keymaps.lua`
+- Create: `lua/cccvno1/plugins/markdown.lua`
+- Modify: `lua/cccvno1/keymaps.lua`
 
 - [ ] **Step 1: Create Markdown plugin spec**
 
-Create `lua/ad/plugins/markdown.lua`:
+Create `lua/cccvno1/plugins/markdown.lua`:
 
 ```lua
 return {
@@ -1557,7 +1557,7 @@ return {
 
 - [ ] **Step 2: Add Markdown keymaps**
 
-Append to `lua/ad/keymaps.lua`:
+Append to `lua/cccvno1/keymaps.lua`:
 
 ```lua
 map("n", "<leader>mp", "<cmd>LivePreviewToggle<cr>", { desc = "Markdown preview" })
@@ -1580,7 +1580,7 @@ Expected: exits 0 and prints `markdown layer ok`.
 - [ ] **Step 4: Commit Markdown layer**
 
 ```bash
-git add lua/ad/plugins/markdown.lua lua/ad/keymaps.lua lazy-lock.json
+git add lua/cccvno1/plugins/markdown.lua lua/cccvno1/keymaps.lua lazy-lock.json
 git commit -m "feat: add markdown reading and preview"
 ```
 
@@ -1589,7 +1589,7 @@ git commit -m "feat: add markdown reading and preview"
 ### Task 9: Final Validation and Health
 
 **Files:**
-- Modify: `lua/ad/core/health.lua`
+- Modify: `lua/cccvno1/core/health.lua`
 - Modify: plugin specs only if validation reveals load errors.
 
 - [ ] **Step 1: Run plugin installation**
@@ -1609,14 +1609,14 @@ Expected: exits 0 and prints `startup ok`.
 Run:
 
 ```bash
-nvim --headless "+lua require('ad.core.bigfile'); require('ad.core.health'); require('ad.ai.contexts.review').render(); print('modules ok')" +qa
+nvim --headless "+lua require('cccvno1.core.bigfile'); require('cccvno1.core.health'); require('cccvno1.ai.contexts.review').render(); print('modules ok')" +qa
 ```
 
 Expected: exits 0 and prints `modules ok`.
 
 - [ ] **Step 4: Run health check**
 
-Run: `nvim --headless "+checkhealth ad" +qa`
+Run: `nvim --headless "+checkhealth cccvno1" +qa`
 
 Expected: exits 0. Missing optional tools such as `node`, `codex`, `opencode`, or `tree-sitter` appear as warnings, not Lua errors.
 
@@ -1625,9 +1625,9 @@ Expected: exits 0. Missing optional tools such as `node`, `codex`, `opencode`, o
 Run:
 
 ```bash
-perl -e 'print "x" x (2 * 1024 * 1024)' > /tmp/ad-bigfile.txt
-nvim --headless /tmp/ad-bigfile.txt "+lua assert(vim.b.bigfile == true, 'bigfile not detected'); print('bigfile ok')" +qa
-rm -f /tmp/ad-bigfile.txt
+perl -e 'print "x" x (2 * 1024 * 1024)' > /tmp/cccvno1-bigfile.txt
+nvim --headless /tmp/cccvno1-bigfile.txt "+lua assert(vim.b.bigfile == true, 'bigfile not detected'); print('bigfile ok')" +qa
+rm -f /tmp/cccvno1-bigfile.txt
 ```
 
 Expected: exits 0 and prints `bigfile ok`.
@@ -1637,7 +1637,7 @@ Expected: exits 0 and prints `bigfile ok`.
 Run:
 
 ```bash
-nvim --headless "+lua local r=require('ad.ai.contexts.review').render(); assert(type(r)=='string' and #r > 0); print('review context ok')" +qa
+nvim --headless "+lua local r=require('cccvno1.ai.contexts.review').render(); assert(type(r)=='string' and #r > 0); print('review context ok')" +qa
 ```
 
 Expected: exits 0 and prints `review context ok`.

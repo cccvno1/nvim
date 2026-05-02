@@ -21,6 +21,10 @@ local tools = {
   "shellcheck",
   "shfmt",
   "clang-format",
+  "debugpy",
+  "delve",
+  "js-debug-adapter",
+  "codelldb",
 }
 
 local function guarded_root_dir(name, config)
@@ -29,7 +33,7 @@ local function guarded_root_dir(name, config)
   local root_markers = base.root_markers
 
   return function(bufnr, on_dir)
-    if require("ad.core.bigfile").is_big(bufnr) then
+    if require("cccvno1.core.bigfile").is_big(bufnr) then
       return
     end
 
@@ -73,7 +77,7 @@ return {
       end
 
       vim.api.nvim_create_autocmd("LspAttach", {
-        group = vim.api.nvim_create_augroup("ad_lsp_attach", { clear = true }),
+        group = vim.api.nvim_create_augroup("cccvno1_lsp_attach", { clear = true }),
         callback = function(event)
           if vim.b[event.buf].bigfile then
             return
@@ -87,6 +91,7 @@ return {
           map("gr", vim.lsp.buf.references, "References")
           map("K", vim.lsp.buf.hover, "Hover")
           map("<leader>ca", vim.lsp.buf.code_action, "Code action")
+          map("<leader>cr", vim.lsp.buf.rename, "Rename")
           map("<leader>rn", vim.lsp.buf.rename, "Rename")
         end,
       })
@@ -128,7 +133,7 @@ return {
       }
 
       vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
-        group = vim.api.nvim_create_augroup("ad_lint", { clear = true }),
+        group = vim.api.nvim_create_augroup("cccvno1_lint", { clear = true }),
         callback = function(event)
           if not vim.b[event.buf].bigfile then
             lint.try_lint()

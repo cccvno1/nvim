@@ -8,14 +8,14 @@ This file is the practical operating manual for the config. It focuses on what t
 ./scripts/install-deps.sh
 nvim --headless "+Lazy! sync" +qa
 nvim --headless "+MasonToolsInstall" +qa
-nvim --headless "+checkhealth ad" +qa
+nvim --headless "+checkhealth cccvno1" +qa
 ```
 
 Then open Neovim and authenticate tools as needed:
 
 ```vim
 :Copilot auth
-:checkhealth ad
+:checkhealth cccvno1
 ```
 
 For OpenCode and Codex, authenticate in the terminal according to their own CLI flow.
@@ -25,11 +25,11 @@ For OpenCode and Codex, authenticate in the terminal according to their own CLI 
 Use this after an external AI agent edits code.
 
 1. Open changed files with `<leader>fg`, `<leader>ff`, or `<leader>fb`.
-2. Inspect git state with `<leader>gg`, `]h`, `[h`, and `<leader>hp`.
-3. Open a code diff with `<leader>gd` when you want review-focused diff navigation.
+2. Inspect hunks with `]h`, `[h`, and `<leader>hp`.
+3. Open Diffview with `<leader>gg` when you want review-focused diff navigation.
 4. Check diagnostics with `<leader>xx`.
 5. Check structure with `<leader>o`.
-6. Send review context with `<leader>ar`.
+6. Send targeted context with `<leader>gr`, `<leader>ax`, `<leader>aq`, or visual `<leader>as`.
 
 The review context includes changed files, git diff, diagnostics, quickfix, and outline. It is meant for prompts such as:
 
@@ -55,7 +55,7 @@ The debug context includes diagnostics, quickfix, DAP state, recent test output,
 For small questions about code:
 
 1. Select a region in visual mode.
-2. Press `<leader>aa`.
+2. Press `<leader>as` to send it to the terminal agent, or `<leader>aa` for the Sidekick path.
 3. Ask the agent to explain, rewrite, review, or generate a focused patch.
 
 For broader questions, prefer `review_pack` or `debug_pack` over sending huge buffers manually.
@@ -65,8 +65,9 @@ For broader questions, prefer `review_pack` or `debug_pack` over sending huge bu
 Use Git in three layers:
 
 - Fast hunk navigation: `]h`, `[h`, `<leader>hp`, `<leader>hr`.
-- Status, staging, commit, branch operations: `<leader>gg`.
-- Focused code diff review: `<leader>gd`.
+- Status, staging, commit, branch operations: lazygit in the tmux `git` window.
+- Focused code diff and conflict review: `<leader>gg` for Diffview, plus gitsigns hunks.
+- AI review/message assistance: lazygit `Ctrl-g` or `<leader>gr`, backed by `ws`.
 
 The intended practice is to review AI-generated changes before committing:
 
@@ -76,6 +77,17 @@ git diff --stat
 ```
 
 Then use Neovim hunk and diff tools to inspect content.
+
+### AI-assisted Git finishing
+
+1. Review agent changes in Neovim.
+2. Open lazygit in the `git` tmux window.
+3. Press the AI Git action key and choose `Plan commits`.
+4. Review the plan in `agent-git`.
+5. Stage the first logical group manually in lazygit.
+6. Run `AI message staged`.
+7. Run `Commit staged diff with AI message` and confirm.
+8. Repeat until the working tree is clean.
 
 ## Search And Replace
 
@@ -126,14 +138,14 @@ Run after plugin updates or script changes:
 ```sh
 nvim --headless "+Lazy! sync" +qa
 nvim --headless "+MasonToolsInstall" +qa
-nvim --headless "+checkhealth ad" +qa
+nvim --headless "+checkhealth cccvno1" +qa
 find lua -name '*.lua' -print0 | xargs -0 luac -p
 ```
 
 Run inside Neovim when something feels off:
 
 ```vim
-:checkhealth ad
+:checkhealth cccvno1
 :Lazy
 :Mason
 ```

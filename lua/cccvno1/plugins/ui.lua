@@ -24,10 +24,42 @@ return {
     end,
   },
   {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Buffer local keymaps",
+      },
+    },
+    opts = {
+      preset = "modern",
+      spec = {
+        { "<leader>a", group = "ai" },
+        { "<leader>b", group = "buffers" },
+        { "<leader>c", group = "code" },
+        { "<leader>d", group = "debug" },
+        { "<leader>f", group = "find" },
+        { "<leader>g", group = "git" },
+        { "<leader>h", group = "hunks" },
+        { "<leader>m", group = "markdown" },
+        { "<leader>q", group = "quit" },
+        { "<leader>s", group = "search" },
+        { "<leader>t", group = "tests" },
+        { "<leader>u", group = "ui" },
+        { "<leader>w", group = "work" },
+        { "<leader>x", group = "diagnostics" },
+      },
+    },
+  },
+  {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     opts = function()
-      local ui = require("ad.core.ui")
+      local ui = require("cccvno1.core.ui")
       return {
         options = {
           theme = "kanagawa",

@@ -70,14 +70,14 @@ return {
       require("neotest").setup({
         adapters = adapters,
         consumers = {
-          ad_test_output = require("ad.ai.contexts.test").neotest_consumer,
+          cccvno1_test_output = require("cccvno1.ai.contexts.test").neotest_consumer,
         },
       })
     end,
   },
   {
     "stevearc/overseer.nvim",
-    cmd = { "OverseerRun", "OverseerToggle", "OverseerInfo" },
+    cmd = { "OverseerRun", "OverseerToggle", "OverseerOpen", "OverseerClose", "OverseerShell", "OverseerTaskAction" },
     keys = {
       { "<leader>wr", "<cmd>OverseerRun<cr>", desc = "Run task" },
       { "<leader>wt", "<cmd>OverseerToggle<cr>", desc = "Tasks" },

@@ -149,7 +149,7 @@ local function schedule_apply(bufnr, delay)
 end
 
 function M.setup()
-  local group = vim.api.nvim_create_augroup("ad_bigfile", { clear = true })
+  local group = vim.api.nvim_create_augroup("cccvno1_bigfile", { clear = true })
   vim.api.nvim_create_autocmd("BufReadPre", {
     group = group,
     callback = function(event)

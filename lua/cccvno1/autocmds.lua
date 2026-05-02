@@ -1,4 +1,4 @@
-local augroup = vim.api.nvim_create_augroup("ad_core", { clear = true })
+local augroup = vim.api.nvim_create_augroup("cccvno1_core", { clear = true })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = augroup,
@@ -26,4 +26,4 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-require("ad.core.bigfile").setup()
+require("cccvno1.core.bigfile").setup()

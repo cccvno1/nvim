@@ -97,7 +97,7 @@ function M.debug_pack()
     "",
     M.task_output(),
     "",
-    require("ad.ai.contexts.test").render(),
+    require("cccvno1.ai.contexts.test").render(),
   }, "\n")
 end
 

@@ -33,7 +33,7 @@ The configuration is organized as core modules plus plugin specifications.
 
 ```text
 init.lua
-lua/ad/
+lua/cccvno1/
   bootstrap.lua
   options.lua
   autocmds.lua

@@ -54,7 +54,11 @@ return {
       require("dap-go").setup()
 
       local python = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
-      require("dap-python").setup(python)
+      if vim.uv.fs_stat(python) then
+        require("dap-python").setup(python)
+      else
+        vim.notify("Skipping Python DAP setup: debugpy is not installed", vim.log.levels.WARN)
+      end
 
       local js_debug = vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js"
       if vim.uv.fs_stat(js_debug) then

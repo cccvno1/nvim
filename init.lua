@@ -1,17 +1,18 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-require("ad.bootstrap")
-require("ad.options")
-require("ad.autocmds")
-require("ad.keymaps")
+require("cccvno1.bootstrap")
+require("cccvno1.options")
+require("cccvno1.autocmds")
+require("cccvno1.keymaps")
 
 require("lazy").setup({
-  { import = "ad.plugins" },
+  { import = "cccvno1.plugins" },
 }, {
   checker = { enabled = true, notify = false },
   change_detection = { notify = false },
   install = { colorscheme = { "kanagawa" } },
+  rocks = { enabled = false },
   ui = { border = "rounded" },
   performance = {
     rtp = {

@@ -48,15 +48,15 @@ end
 
 function M.render()
   return table.concat({
-    require("ad.ai.contexts.git").changed(),
+    require("cccvno1.ai.contexts.git").changed(),
     "",
-    require("ad.ai.contexts.git").diff(),
+    require("cccvno1.ai.contexts.git").diff(),
     "",
     diagnostics(),
     "",
     "Quickfix context:\n" .. quickfix(),
     "",
-    require("ad.ai.contexts.outline").render(),
+    require("cccvno1.ai.contexts.outline").render(),
   }, "\n")
 end
 

@@ -28,28 +28,28 @@ function M.setup()
       mux = { enabled = false },
       context = {
         git_changed = safe_context(function()
-          return require("ad.ai.contexts.git").changed()
+          return require("cccvno1.ai.contexts.git").changed()
         end),
         git_diff = safe_context(function()
-          return require("ad.ai.contexts.git").diff()
+          return require("cccvno1.ai.contexts.git").diff()
         end),
         outline = safe_context(function()
-          return require("ad.ai.contexts.outline").render()
+          return require("cccvno1.ai.contexts.outline").render()
         end),
         review_pack = safe_context(function()
-          return require("ad.ai.contexts.review").render()
+          return require("cccvno1.ai.contexts.review").render()
         end),
         dap_state = safe_context(function()
-          return require("ad.ai.contexts.debug").dap_state()
+          return require("cccvno1.ai.contexts.debug").dap_state()
         end),
         test_output = safe_context(function()
-          return require("ad.ai.contexts.test").render()
+          return require("cccvno1.ai.contexts.test").render()
         end),
         task_output = safe_context(function()
-          return require("ad.ai.contexts.debug").task_output()
+          return require("cccvno1.ai.contexts.debug").task_output()
         end),
         debug_pack = safe_context(function()
-          return require("ad.ai.contexts.debug").debug_pack()
+          return require("cccvno1.ai.contexts.debug").debug_pack()
         end),
       },
       prompts = {

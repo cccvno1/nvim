@@ -10,7 +10,7 @@ return {
   },
   {
     "stevearc/oil.nvim",
-    cmd = "Oil",
+    lazy = false,
     opts = {
       default_file_explorer = true,
       columns = { "icon" },

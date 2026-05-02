@@ -7,7 +7,7 @@ return {
       "ibhagwan/fzf-lua",
     },
     config = function()
-      require("ad.ai.sidekick").setup()
+      require("cccvno1.ai.sidekick").setup()
     end,
   },
 }

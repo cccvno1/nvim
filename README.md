@@ -1,8 +1,8 @@
-# AD Neovim
+# CCCVNO1 Neovim
 
-AI-first Neovim workbench for reviewing generated code, inspecting diffs, debugging failures, and sending useful context to external agents.
+CLI-first AI workbench for reviewing generated code, inspecting diffs, debugging failures, and sending useful context to terminal agents.
 
-This config is intentionally inspectable. It is not a distribution layer and does not use a large utility bundle. Core policy lives in `lua/ad/core`, AI context glue lives in `lua/ad/ai`, and plugin specs live in `lua/ad/plugins`.
+This config is intentionally inspectable. It is not a distribution layer and does not use a large utility bundle. Core policy lives in `lua/cccvno1/core`, terminal-agent context glue lives in `lua/cccvno1/integrations`, and plugin specs live in `lua/cccvno1/plugins`.
 
 ## Quick Start
 
@@ -28,7 +28,7 @@ nvim
 Run the local health check:
 
 ```vim
-:checkhealth ad
+:checkhealth cccvno1
 ```
 
 If Copilot is not authenticated yet:
@@ -39,26 +39,35 @@ If Copilot is not authenticated yet:
 
 ## Mental Model
 
-Neovim is the state organizer. It owns buffers, diagnostics, quickfix, git diff, outline, tests, tasks, and debug state. Large agents such as Codex and OpenCode remain external tools. Sidekick is the bridge inside Neovim for sending compact context to those tools.
+Neovim is the review and manual-edit surface. Codex/OpenCode run as terminal agents inside tmux. `ws` owns workspace entry, tmux session creation, and context delivery. Lazygit owns repo-level Git operations, while Diffview and gitsigns handle serious review and conflicts.
 
 Common loop:
 
 1. Let an AI tool generate or change code.
 2. Review changed files and hunks in Neovim.
 3. Check diagnostics, outline, tests, and debug/task output.
-4. Send `review_pack` or `debug_pack` to the AI agent.
+4. Send selection, diagnostics, quickfix, or Git review context to the terminal agent.
 5. Apply fixes, rerun checks, commit.
 
 ## Important Entrypoints
 
-- `:checkhealth ad`: local health checks for system tools, Mason packages, Copilot, Sidekick, and DAP.
-- `<leader>ar`: send AI review context.
-- `<leader>ad`: send AI debug context.
+- `:checkhealth cccvno1`: local health checks for system tools, Mason packages, Copilot, Sidekick, and DAP.
+- `<leader>`: pause after the leader key to open which-key.
+- `<leader>?`: show buffer-local keymaps in which-key.
+- `<leader>ar`: send Sidekick review context.
+- `<leader>ad`: send Sidekick debug context.
 - visual `<leader>aa`: send selected text to Sidekick.
-- `<leader>gg`: open Neogit.
-- `<leader>gd`: open codediff.nvim.
+- visual `<leader>as`: send selected text to the terminal agent via `ws`.
+- `<leader>ax`: send diagnostics to the terminal agent via `ws`.
+- `<leader>aq`: send quickfix to the terminal agent via `ws`.
+- `<leader>fe`: open Oil file explorer.
+- `<leader>cf`: format current buffer.
+- `<leader>uf`: toggle format-on-save for the current buffer.
+- `<leader>gg`: open Diffview.
+- `<leader>gq`: close Diffview.
+- `<leader>gr`: send Git review context to the terminal agent via `ws`.
 - `<leader>xx`: diagnostics list.
-- `<leader>o`: outline.
+- `<leader>co`: outline.
 - `<leader>mp`: Markdown/browser preview.
 
 See [docs/WORKFLOWS.md](docs/WORKFLOWS.md) for task-oriented usage and [docs/KEYMAPS.md](docs/KEYMAPS.md) for the keymap index.
@@ -85,6 +94,13 @@ AI CLIs:
 - `codex`
 - `opencode`
 
+CLI workbench tools:
+
+- `tmux`
+- `lazygit`
+- `gum`
+- `ws`
+
 The install script supports `pacman`, `apt`, `dnf`, and `brew`. It also installs Codex with `npm install -g @openai/codex`, which is the official OpenAI documented command, and OpenCode with `npm install -g opencode-ai`, which is one of the official OpenCode install methods.
 
 References:
@@ -96,7 +112,7 @@ References:
 
 ```text
 init.lua
-lua/ad/
+lua/cccvno1/
   bootstrap.lua
   options.lua
   autocmds.lua
@@ -115,16 +131,16 @@ Useful checks after changing config:
 ```sh
 find lua -name '*.lua' -print0 | xargs -0 luac -p
 nvim --headless "+lua print('startup ok')" +qa
-nvim --headless "+lua require('ad.core.bigfile'); require('ad.core.health'); require('ad.ai.contexts.review').render(); print('modules ok')" +qa
-nvim --headless "+checkhealth ad" +qa
+nvim --headless "+lua require('cccvno1.core.bigfile'); require('cccvno1.core.health'); require('cccvno1.ai.contexts.review').render(); print('modules ok')" +qa
+nvim --headless "+checkhealth cccvno1" +qa
 ```
 
 Bigfile check:
 
 ```sh
-perl -e 'print "x" x (2 * 1024 * 1024)' > /tmp/ad-bigfile.txt
-nvim --headless /tmp/ad-bigfile.txt "+lua assert(vim.b.bigfile == true, 'bigfile not detected'); print('bigfile ok')" +qa
-rm -f /tmp/ad-bigfile.txt
+perl -e 'print "x" x (2 * 1024 * 1024)' > /tmp/cccvno1-bigfile.txt
+nvim --headless /tmp/cccvno1-bigfile.txt "+lua assert(vim.b.bigfile == true, 'bigfile not detected'); print('bigfile ok')" +qa
+rm -f /tmp/cccvno1-bigfile.txt
 ```
 
 ## Notes

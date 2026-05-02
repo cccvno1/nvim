@@ -24,22 +24,28 @@ return {
     },
   },
   {
-    "NeogitOrg/neogit",
-    cmd = "Neogit",
+    "sindrets/diffview.nvim",
+    cmd = {
+      "DiffviewOpen",
+      "DiffviewClose",
+      "DiffviewFileHistory",
+      "DiffviewToggleFiles",
+      "DiffviewFocusFiles",
+    },
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "sindrets/diffview.nvim",
     },
     opts = {
-      integrations = {
-        diffview = false,
+      enhanced_diff_hl = true,
+      view = {
+        default = {
+          layout = "diff2_horizontal",
+        },
+        merge_tool = {
+          layout = "diff3_horizontal",
+        },
       },
     },
-  },
-  {
-    "esmuellert/codediff.nvim",
-    cmd = "CodeDiff",
-    opts = {},
   },
   {
     "folke/trouble.nvim",
@@ -50,7 +56,7 @@ return {
     "stevearc/aerial.nvim",
     cmd = { "AerialToggle", "AerialOpen" },
     opts = function()
-      local bigfile = require("ad.core.bigfile").defaults
+      local bigfile = require("cccvno1.core.bigfile").defaults
       return {
         backends = { "lsp", "treesitter", "markdown", "man" },
         disable_max_lines = bigfile.lines,

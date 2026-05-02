@@ -1,286 +1,231 @@
 # Keymaps
 
-Leader is `<Space>`.
+Leader is `<Space>`. Local leader is `<Space>`.
 
-This document is split into three layers:
+This page is organized like a small distribution cheat sheet: start with the
+leader groups, then use the later sections when you need native Vim habits,
+LSP-only mappings, or plugin-window defaults.
 
-- AD custom mappings: defined by this config.
-- Neovim default mappings: built into Neovim/Vim and worth using directly.
-- Plugin-local mappings: active inside a plugin UI after opening that plugin.
+Inspired by LazyVim's which-key style grouping and AstroNvim's action-first
+mapping tables.
 
-For the exact live state in your current session:
+Press `<leader>` and pause to open which-key for the current prefix. Press
+`<leader>?` to inspect buffer-local mappings.
 
-```vim
-:map
-:nmap
-:verbose map <key>
-```
-The most useful portable built-in command is:
+## At A Glance
 
-```vim
-:map
-```
-
-## AD Custom Mappings
-
-These are the mappings intentionally added by this config.
-
-### Core
-
-| Key | Mode | Action |
+| Prefix | Group | Use For |
 | --- | --- | --- |
-| `<Esc>` | normal | Clear search highlight |
-| `<Space>` | normal, visual | Disabled as a standalone key |
-| `[q` | normal | Previous quickfix item |
-| `]q` | normal | Next quickfix item |
-| `[l` | normal | Previous location item |
-| `]l` | normal | Next location item |
+| `<leader>?` | Help | Buffer-local keymaps |
+| `<leader>f` | Find | Files, grep, buffers |
+| `<leader>b` | Buffers | Close, isolate, pin |
+| `<leader>c` | Code | Format, actions, outline |
+| `<leader>g` | Git | Diff review and agent handoff |
+| `<leader>h` | Hunks | Git hunk actions |
+| `<leader>x` | Diagnostics | Trouble lists |
+| `<leader>a` | AI | Sidekick prompts and `ws` agent handoff |
+| `<leader>d` | Debug | DAP breakpoints and UI |
+| `<leader>t` | Tests | Neotest |
+| `<leader>w` | Work | Write file and Overseer tasks |
+| `<leader>q` | Quit | Quit current window |
+| `<leader>u` | UI | Local display toggles |
+| `<leader>m` | Markdown | Browser preview |
 
-### Files, Buffers, Search
+## Leader Keymaps
 
-| Key | Mode | Action |
+### Find
+
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<leader>ff` | Find files | normal | fzf-lua |
+| `<leader>fg` | Live grep | normal | fzf-lua |
+| `<leader>fb` | Find buffers | normal | fzf-lua + local wrapper |
+| `<leader>fe` | File explorer | normal | Oil |
+| `<leader>sr` | Search and replace | normal | GrugFar |
+
+### Buffers
+
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<leader>bd` | Close current buffer | normal | barbar wrapper |
+| `<leader>bo` | Close other buffers | normal | barbar wrapper |
+| `<leader>bp` | Pin buffer | normal | barbar wrapper |
+
+Useful built-ins nearby:
+
+| Key | Action | Mode |
 | --- | --- | --- |
-| `<leader>ff` | normal | Find files |
-| `<leader>fg` | normal | Live grep |
-| `<leader>fb` | normal | Find buffers |
-| `<leader>e` | normal | Open Oil file manager |
-| `<leader>sr` | normal | Search and replace |
-| `<leader>bd` | normal | Close current buffer |
-| `<leader>bo` | normal | Close other buffers |
-| `<leader>bp` | normal | Pin buffer |
+| `[b` | Previous buffer | normal |
+| `]b` | Next buffer | normal |
+| `[B` | First buffer | normal |
+| `]B` | Last buffer | normal |
 
-### Navigation
+### Code
 
-| Key | Mode | Action |
-| --- | --- | --- |
-| `s` | normal, visual, operator | Flash jump |
-| `<leader>o` | normal | Toggle outline |
-| `gd` | normal | Goto definition, after LSP attaches |
-| `gr` | normal | References, after LSP attaches |
-| `K` | normal | Hover, after LSP attaches |
-| `<leader>ca` | normal | Code action, after LSP attaches |
-| `<leader>rn` | normal | Rename, after LSP attaches |
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<leader>cf` | Format buffer | normal | conform.nvim |
+| `<leader>co` | Toggle outline | normal | Aerial |
+| `<leader>ca` | Code action | normal | LSP, after attach |
+| `<leader>cr` | Rename symbol | normal | LSP, after attach |
 
-### Git And Review
+### Git
 
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<leader>gg` | normal | Open Neogit |
-| `<leader>gd` | normal | Open codediff.nvim |
-| `]h` | normal | Next git hunk |
-| `[h` | normal | Previous git hunk |
-| `<leader>hp` | normal | Preview hunk |
-| `<leader>hr` | normal | Reset hunk |
-
-### Diagnostics And Lists
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<leader>xx` | normal | Toggle diagnostics in Trouble |
-| `<leader>xq` | normal | Toggle quickfix in Trouble |
-
-### AI
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<leader>ar` | normal | Send AI review pack |
-| `<leader>ad` | normal | Send AI debug pack |
-| `<leader>aa` | visual | Send selected text |
-
-### Debug
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<F5>` | normal | DAP continue |
-| `<F10>` | normal | DAP step over |
-| `<F11>` | normal | DAP step into |
-| `<F12>` | normal | DAP step out |
-| `<leader>db` | normal | Toggle persistent breakpoint |
-| `<leader>du` | normal | Toggle DAP UI |
-
-### Tests And Tasks
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<leader>tt` | normal | Run nearest test |
-| `<leader>tf` | normal | Run file tests |
-| `<leader>ts` | normal | Toggle test summary |
-| `<leader>wr` | normal | Run task |
-| `<leader>wt` | normal | Toggle tasks |
-
-### Markdown
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<leader>mp` | normal | Toggle Markdown/browser preview |
-
-## Neovim Defaults Added By Modern Neovim
-
-These appear in `:map` even without this config because Neovim ships them as defaults.
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<leader>gg` | Open Diffview | normal | diffview |
+| `<leader>gq` | Close Diffview | normal | diffview |
+| `<leader>gr` | Send Git review context to agent | normal | ws |
+| `]h` | Next git hunk | normal | gitsigns |
+| `[h` | Previous git hunk | normal | gitsigns |
+| `<leader>hp` | Preview hunk | normal | gitsigns |
+| `<leader>hr` | Reset hunk | normal | gitsigns |
 
 ### Diagnostics
 
-| Key | Mode | Action |
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<leader>xx` | Toggle diagnostics list | normal | Trouble |
+| `<leader>xq` | Toggle quickfix list | normal | Trouble |
+| `[d` | Previous diagnostic | normal | Neovim default |
+| `]d` | Next diagnostic | normal | Neovim default |
+| `[D` | First diagnostic | normal | Neovim default |
+| `]D` | Last diagnostic | normal | Neovim default |
+| `<C-W>d` | Show diagnostic under cursor | normal | Neovim default |
+
+### AI
+
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<leader>ar` | Send `review_pack` | normal | Sidekick |
+| `<leader>ad` | Send `debug_pack` | normal | Sidekick |
+| `<leader>aa` | Send selected text | visual | Sidekick |
+| `<leader>as` | Send selection to agent | visual | ws |
+| `<leader>ax` | Send diagnostics to agent | normal | ws |
+| `<leader>aq` | Send quickfix to agent | normal | ws |
+
+`review_pack` includes changed files, git diff, diagnostics, quickfix, and the
+current file outline. `debug_pack` includes diagnostics, quickfix, DAP state,
+recent task output, and recent test output.
+
+### Debug
+
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<F5>` | Continue/start debugger | normal | nvim-dap |
+| `<F10>` | Step over | normal | nvim-dap |
+| `<F11>` | Step into | normal | nvim-dap |
+| `<F12>` | Step out | normal | nvim-dap |
+| `<leader>db` | Toggle persistent breakpoint | normal | persistent-breakpoints |
+| `<leader>du` | Toggle DAP UI | normal | dap-ui |
+
+### Tests And Tasks
+
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<leader>tt` | Run nearest test | normal | neotest |
+| `<leader>tf` | Run file tests | normal | neotest |
+| `<leader>ts` | Toggle test summary | normal | neotest |
+| `<leader>ww` | Write file | normal | Neovim |
+| `<leader>wr` | Run task | normal | Overseer |
+| `<leader>wt` | Toggle task list | normal | Overseer |
+
+### Quit
+
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<leader>qq` | Quit current window | normal | Neovim |
+
+### UI
+
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<leader>uf` | Toggle autoformat | normal | Buffer variable |
+| `<leader>ud` | Toggle diagnostics | normal | Neovim diagnostics |
+| `<leader>ul` | Toggle list chars | normal | Neovim local option |
+| `<leader>ur` | Toggle relative number | normal | Neovim local option |
+| `<leader>uw` | Toggle wrap | normal | Neovim local option |
+
+### Navigation
+
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `s` | Flash jump | normal, visual, operator | flash.nvim |
+
+Note: `s` intentionally replaces Vim's native substitute-character command in
+normal/visual/operator contexts. Use `cl` or `xi` if you need the original
+single-character substitute habit.
+
+### Markdown
+
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<leader>mp` | Toggle browser preview | normal | live-preview.nvim |
+
+## LSP Keymaps
+
+These appear only after an LSP server attaches to the current buffer.
+
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `gd` | Go to definition | normal | local LSP attach |
+| `gr` | References | normal | local LSP attach |
+| `K` | Hover | normal | local LSP attach |
+| `<leader>ca` | Code action | normal | local LSP attach |
+| `<leader>cr` | Rename | normal | local LSP attach |
+| `<leader>rn` | Rename | normal | local LSP attach |
+
+Modern Neovim also provides these LSP defaults:
+
+| Key | Action | Mode |
 | --- | --- | --- |
-| `[d` | normal | Previous diagnostic |
-| `]d` | normal | Next diagnostic |
-| `[D` | normal | First diagnostic in current buffer |
-| `]D` | normal | Last diagnostic in current buffer |
-| `<C-W>d` | normal | Show diagnostic under cursor |
-| `<C-W><C-D>` | normal | Same as `<C-W>d` |
+| `grn` | Rename | normal |
+| `gra` | Code action | normal, visual |
+| `grr` | References | normal |
+| `gri` | Implementation | normal |
+| `grt` | Type definition | normal |
+| `gO` | Document symbols | normal |
 
-### LSP Defaults
+## Core Editing
 
-These are Neovim defaults. This config also adds `gd`, `gr`, `K`, `<leader>ca`, and `<leader>rn` on LSP attach for familiar VSCode-like usage.
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `grn` | normal | Rename |
-| `gra` | normal, visual | Code action |
-| `grr` | normal | References |
-| `gri` | normal | Implementation |
-| `grt` | normal | Type definition |
-| `grx` | normal | Run code lens |
-| `gO` | normal | Document symbols |
-| `<C-S>` | select | Signature help |
-
-### Comments
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `gcc` | normal | Toggle current line comment |
-| `gc` | normal, visual, operator | Toggle comment |
-| `gc` | operator | Comment text object/operator |
-
-### Tree-sitter Selection
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `an` | visual, operator | Select parent/outer node |
-| `in` | visual, operator | Select child/inner node |
-| `[n` | visual | Select previous node |
-| `]n` | visual | Select next node |
-
-### Buffer, Quickfix, Location, Args, Tags
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `[b` | normal | Previous buffer |
-| `]b` | normal | Next buffer |
-| `[B` | normal | First buffer |
-| `]B` | normal | Last buffer |
-| `[q` | normal | Previous quickfix item, overridden by this config |
-| `]q` | normal | Next quickfix item, overridden by this config |
-| `[Q` | normal | First quickfix item |
-| `]Q` | normal | Last quickfix item |
-| `[<C-Q>` | normal | Previous quickfix file |
-| `]<C-Q>` | normal | Next quickfix file |
-| `[l` | normal | Previous location item, overridden by this config |
-| `]l` | normal | Next location item, overridden by this config |
-| `[L` | normal | First location item |
-| `]L` | normal | Last location item |
-| `[<C-L>` | normal | Previous location file |
-| `]<C-L>` | normal | Next location file |
-| `[a` | normal | Previous arglist item |
-| `]a` | normal | Next arglist item |
-| `[A` | normal | First arglist item |
-| `]A` | normal | Last arglist item |
-| `[t` | normal | Previous tag |
-| `]t` | normal | Next tag |
-| `[T` | normal | First tag |
-| `]T` | normal | Last tag |
-| `[<C-T>` | normal | Previous preview tag |
-| `]<C-T>` | normal | Next preview tag |
-
-### Small Editing Defaults
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `[<Space>` | normal | Add empty line above cursor |
-| `]<Space>` | normal | Add empty line below cursor |
-| `Y` | normal | Yank to end of line |
-| `&` | normal | Repeat last substitute with flags |
-| `gx` | normal, visual | Open filepath or URL under cursor |
-| `<C-L>` | normal | Clear search highlight, diff update, redraw |
-| `<Tab>` | select | Jump to next snippet placeholder if active |
-| `<S-Tab>` | select | Jump to previous snippet placeholder if active |
-
-## Vim Defaults Worth Learning
-
-This is the core language of Neovim. These are not custom mappings.
-
-### Mode Switching
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `i` | normal | Insert before cursor |
-| `I` | normal | Insert at first non-blank character |
-| `a` | normal | Insert after cursor |
-| `A` | normal | Insert at end of line |
-| `o` | normal | Open line below |
-| `O` | normal | Open line above |
-| `v` | normal | Visual character mode |
-| `V` | normal | Visual line mode |
-| `<C-V>` | normal | Visual block mode |
-| `<Esc>` | insert, visual | Return to normal mode |
+These are Vim/Neovim defaults worth keeping in muscle memory. They are not
+custom mappings unless noted.
 
 ### Movement
 
-| Key | Mode | Action |
+| Key | Action | Mode |
 | --- | --- | --- |
-| `h` `j` `k` `l` | normal, visual, operator | Left, down, up, right |
-| `w` | normal, visual, operator | Next word |
-| `W` | normal, visual, operator | Next WORD |
-| `b` | normal, visual, operator | Previous word |
-| `B` | normal, visual, operator | Previous WORD |
-| `e` | normal, visual, operator | End of word |
-| `E` | normal, visual, operator | End of WORD |
-| `0` | normal, visual, operator | Start of line |
-| `^` | normal, visual, operator | First non-blank character |
-| `$` | normal, visual, operator | End of line |
-| `gg` | normal, visual, operator | First line |
-| `G` | normal, visual, operator | Last line |
-| `{` | normal, visual, operator | Previous paragraph/block |
-| `}` | normal, visual, operator | Next paragraph/block |
-| `%` | normal, visual, operator | Matching bracket, paren, brace, or language item |
-| `f<char>` | normal, visual, operator | Find char forward on line |
-| `F<char>` | normal, visual, operator | Find char backward on line |
-| `t<char>` | normal, visual, operator | Till char forward on line |
-| `T<char>` | normal, visual, operator | Till char backward on line |
-| `;` | normal, visual, operator | Repeat last `f/F/t/T` |
-| `,` | normal, visual, operator | Repeat last `f/F/t/T` backward |
+| `h` `j` `k` `l` | Left/down/up/right | normal, visual, operator |
+| `w` / `b` / `e` | Next/start previous/end of word | normal, visual, operator |
+| `0` / `^` / `$` | Start/first non-blank/end of line | normal, visual, operator |
+| `gg` / `G` | First/last line | normal, visual, operator |
+| `{` / `}` | Previous/next paragraph or block | normal, visual, operator |
+| `%` | Matching pair or language item | normal, visual, operator |
+| `<C-O>` / `<C-I>` | Jump backward/forward | normal |
 
-### Editing Operators
+### Operators
 
-| Key | Mode | Action |
+| Key | Action | Mode |
 | --- | --- | --- |
-| `d{motion}` | normal | Delete by motion |
-| `dd` | normal | Delete line |
-| `c{motion}` | normal | Change by motion |
-| `cc` | normal | Change line |
-| `y{motion}` | normal | Yank by motion |
-| `yy` | normal | Yank line |
-| `p` | normal | Paste after cursor |
-| `P` | normal | Paste before cursor |
-| `x` | normal | Delete character |
-| `r<char>` | normal | Replace one character |
-| `u` | normal | Undo |
-| `<C-R>` | normal | Redo |
-| `.` | normal | Repeat last change |
+| `d{motion}` / `dd` | Delete by motion / line | normal |
+| `c{motion}` / `cc` | Change by motion / line | normal |
+| `y{motion}` / `yy` | Yank by motion / line | normal |
+| `p` / `P` | Paste after / before cursor | normal |
+| `u` / `<C-R>` | Undo / redo | normal |
+| `.` | Repeat last change | normal |
 
 ### Text Objects
 
-| Key | Mode | Action |
+| Key | Action | Mode |
 | --- | --- | --- |
-| `iw` | operator, visual | Inner word |
-| `aw` | operator, visual | Around word |
-| `i"` `a"` | operator, visual | Inside/around double quotes |
-| `i'` `a'` | operator, visual | Inside/around single quotes |
-| `` i` `` `` a` `` | operator, visual | Inside/around backticks |
-| `i(` `a(` | operator, visual | Inside/around parentheses |
-| `i[` `a[` | operator, visual | Inside/around brackets |
-| `i{` `a{` | operator, visual | Inside/around braces |
-| `ip` `ap` | operator, visual | Inner/around paragraph |
+| `iw` / `aw` | Inner / around word | visual, operator |
+| `i"` / `a"` | Inside / around double quotes | visual, operator |
+| `i'` / `a'` | Inside / around single quotes | visual, operator |
+| `` i` `` / `` a` `` | Inside / around backticks | visual, operator |
+| `i(` / `a(` | Inside / around parentheses | visual, operator |
+| `i[` / `a[` | Inside / around brackets | visual, operator |
+| `i{` / `a{` | Inside / around braces | visual, operator |
+| `ip` / `ap` | Inner / around paragraph | visual, operator |
 
 Examples:
 
@@ -291,280 +236,180 @@ vi{   visually select inside braces
 yap   yank a paragraph
 ```
 
-### Search
+### Search And Lists
 
-| Key | Mode | Action |
+| Key | Action | Mode |
 | --- | --- | --- |
-| `/` | normal | Search forward |
-| `?` | normal | Search backward |
-| `n` | normal | Next search match |
-| `N` | normal | Previous search match |
-| `*` | normal | Search word under cursor forward |
-| `#` | normal | Search word under cursor backward |
-| `:%s/old/new/g` | command | Replace in whole file |
-| `:'<,'>s/old/new/g` | command | Replace in visual selection |
+| `<Esc>` | Clear search highlight | normal |
+| `/` / `?` | Search forward / backward | normal |
+| `n` / `N` | Next / previous search match | normal |
+| `*` / `#` | Search word under cursor forward / backward | normal |
+| `[q` / `]q` | Previous / next quickfix item | normal |
+| `[l` / `]l` | Previous / next location item | normal |
 
-### Windows And Tabs
+## Insert And Completion
 
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<C-W>s` | normal | Horizontal split |
-| `<C-W>v` | normal | Vertical split |
-| `<C-W>h` | normal | Focus left window |
-| `<C-W>j` | normal | Focus lower window |
-| `<C-W>k` | normal | Focus upper window |
-| `<C-W>l` | normal | Focus right window |
-| `<C-W>q` | normal | Close window |
-| `<C-W>=` | normal | Equalize window sizes |
-| `gt` | normal | Next tab |
-| `gT` | normal | Previous tab |
+| Key | Action | Mode | Source |
+| --- | --- | --- | --- |
+| `<C-Space>` | Show completion | insert | blink.cmp default preset |
+| `<C-E>` | Hide completion | insert | blink.cmp default preset |
+| `<CR>` | Accept selected completion when menu is active | insert | blink.cmp default preset |
+| `<Tab>` | Select, accept, or jump by state | insert, select | blink.cmp / Neovim |
+| `<S-Tab>` | Previous item or snippet jump by state | insert, select | blink.cmp / Neovim |
 
-### Marks And Jumps
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `m<char>` | normal | Set mark |
-| `` `<char> `` | normal | Jump to mark exact position |
-| `'<char>` | normal | Jump to mark line |
-| `<C-O>` | normal | Jump backward |
-| `<C-I>` | normal | Jump forward |
-| `''` | normal | Jump to previous line position |
-| ``` `` ``` | normal | Jump to previous exact position |
-
-### Registers And Macros
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `"` | normal, visual | Register prefix |
-| `"+y` | normal, visual | Yank to system clipboard |
-| `"+p` | normal | Paste from system clipboard |
-| `q<char>` | normal | Start recording macro |
-| `q` | normal | Stop recording macro |
-| `@<char>` | normal | Run macro |
-| `@@` | normal | Repeat last macro |
-
-## Plugin-Local Defaults
-
-These mappings are active after opening the corresponding plugin UI. Use `?` inside many plugin windows to see their local help.
-
-### lazy.nvim
-
-Open with:
-
-```vim
-:Lazy
-```
-
-Useful defaults:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `?` | normal | Help |
-| `q` | normal | Close |
-| `u` | normal | Update plugins |
-| `s` | normal | Sync plugins |
-| `x` | normal | Clean unused plugins |
-| `c` | normal | Check for updates |
-| `l` | normal | Open log |
-
-### Mason
-
-Open with:
-
-```vim
-:Mason
-```
-
-Useful defaults:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `?` | normal | Help |
-| `q` | normal | Close |
-| `i` | normal | Install package |
-| `u` | normal | Update package |
-| `U` | normal | Update all packages |
-| `X` | normal | Uninstall package |
-| `/` | normal | Filter/search |
-
-### fzf-lua
-
-Opened through `<leader>ff`, `<leader>fg`, and `<leader>fb`.
-
-Common defaults:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<C-J>` / `<C-K>` | insert | Move selection down/up |
-| `<CR>` | insert | Open selected item |
-| `<C-X>` | insert | Open in horizontal split |
-| `<C-V>` | insert | Open in vertical split |
-| `<C-T>` | insert | Open in tab |
-| `<Esc>` | insert | Close picker |
-
-### Oil
-
-Open with `<leader>e`.
-
-Common defaults:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<CR>` | normal | Open file or directory |
-| `-` | normal | Go to parent directory |
-| `_` | normal | Open current working directory |
-| `g?` | normal | Help |
-| `q` | normal | Close |
-
-### Neogit
-
-Open with `<leader>gg`.
-
-Common defaults:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `?` | normal | Help |
-| `q` | normal | Close popup/status window |
-| `s` | normal | Stage item |
-| `u` | normal | Unstage item |
-| `S` | normal | Stage all |
-| `U` | normal | Unstage all |
-| `c` | normal | Commit popup |
-| `P` | normal | Push popup |
-| `p` | normal | Pull popup |
-| `b` | normal | Branch popup |
-| `r` | normal | Rebase popup |
-
-### Trouble
-
-Open diagnostics with `<leader>xx` or quickfix with `<leader>xq`.
-
-Common defaults:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<CR>` | normal | Open item |
-| `o` | normal | Open item |
-| `q` | normal | Close |
-| `r` | normal | Refresh |
-| `?` | normal | Help |
-
-### Aerial
-
-Open with `<leader>o`.
-
-Common defaults:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<CR>` | normal | Jump to symbol |
-| `o` | normal | Jump to symbol |
-| `q` | normal | Close |
-| `{` | normal | Previous symbol |
-| `}` | normal | Next symbol |
-| `?` | normal | Help |
-
-### DAP UI
-
-Open with `<leader>du` after loading DAP.
-
-Common defaults vary by window, but these are reliable habits:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<CR>` | normal | Expand/collapse item or jump |
-| `o` | normal | Open/expand item |
-| `q` | normal | Close focused DAP UI window |
-
-Core debug controls are AD custom mappings: `<F5>`, `<F10>`, `<F11>`, `<F12>`, `<leader>db`, and `<leader>du`.
-
-### Neotest
-
-Use AD custom mappings:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<leader>tt` | normal | Run nearest test |
-| `<leader>tf` | normal | Run file tests |
-| `<leader>ts` | normal | Toggle summary |
-
-Inside the summary window:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<CR>` | normal | Jump/run focused test depending on node |
-| `o` | normal | Expand/collapse node |
-| `q` | normal | Close summary |
-
-### Overseer
-
-Use AD custom mappings:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<leader>wr` | normal | Run task |
-| `<leader>wt` | normal | Toggle task list |
-
-Inside the task list:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<CR>` | normal | Open task action/details |
-| `q` | normal | Close |
-| `?` | normal | Help |
-
-### Sidekick
-
-Use AD custom mappings:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<leader>ar` | normal | Send `review_pack` |
-| `<leader>ad` | normal | Send `debug_pack` |
-| `<leader>aa` | visual | Send selection |
-
-Sidekick terminal window defaults from the plugin config:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<C-B>` | normal, terminal | Insert/open buffers context picker |
-| `<C-F>` | normal, terminal | Insert/open files context picker |
-| `<C-P>` | terminal | Insert prompt/context |
-| `<C-Q>` | terminal | Enter terminal normal mode |
-| `<C-.>` | normal, terminal | Hide terminal window |
-| `<C-Z>` | normal, terminal | Blur terminal and return to previous window |
-| `q` | normal | Hide terminal window |
-| `<CR>` | normal | Send Enter to terminal and stay usable |
-| `<C-H>` `<C-J>` `<C-K>` `<C-L>` | terminal | Navigate Neovim windows when possible |
-
-### blink.cmp
-
-This config uses blink.cmp's `default` preset. Important insert-mode habits:
-
-| Key | Mode | Action |
-| --- | --- | --- |
-| `<C-Space>` | insert | Show completion |
-| `<C-E>` | insert | Hide completion |
-| `<CR>` | insert | Accept selected completion when menu is active |
-| `<Tab>` | insert | Select/accept/jump depending on preset state |
-| `<S-Tab>` | insert | Previous item or snippet jump depending on preset state |
-
-If behavior changes after a plugin update, check:
+If completion behavior changes after an update:
 
 ```vim
 :h blink-cmp-config-keymap
 ```
 
-## Commands Without Keymaps
+## Plugin Windows
 
-These are useful and intentionally left command-driven.
+Use `?` or `g?` inside many plugin windows for local help.
+
+### lazy.nvim
+
+Open with `:Lazy`.
+
+| Key | Action |
+| --- | --- |
+| `?` | Help |
+| `q` | Close |
+| `u` | Update plugins |
+| `s` | Sync plugins |
+| `x` | Clean unused plugins |
+| `c` | Check for updates |
+| `l` | Open log |
+
+### Mason
+
+Open with `:Mason`.
+
+| Key | Action |
+| --- | --- |
+| `?` | Help |
+| `q` | Close |
+| `i` | Install package |
+| `u` | Update package |
+| `U` | Update all packages |
+| `X` | Uninstall package |
+| `/` | Filter/search |
+
+### fzf-lua
+
+Opened by `<leader>ff`, `<leader>fg`, and `<leader>fb`.
+
+| Key | Action | Mode |
+| --- | --- | --- |
+| `<C-J>` / `<C-K>` | Move selection down / up | insert |
+| `<CR>` | Open selected item | insert |
+| `<C-X>` | Open in horizontal split | insert |
+| `<C-V>` | Open in vertical split | insert |
+| `<C-T>` | Open in tab | insert |
+| `<Esc>` | Close picker | insert |
+
+### Oil
+
+Open with `<leader>fe`.
+
+| Key | Action |
+| --- | --- |
+| `<CR>` | Open file or directory |
+| `-` | Go to parent directory |
+| `_` | Open current working directory |
+| `g?` | Help |
+| `q` | Close |
+
+### Diffview
+
+Open with `<leader>gg`; close with `<leader>gq`.
+
+| Key | Action |
+| --- | --- |
+| `g?` | Help |
+| `<CR>` | Open focused file |
+| `q` | Close focused panel |
+| `]c` / `[c` | Next / previous conflict |
+| `<leader>co` | Choose ours in merge view |
+| `<leader>ct` | Choose theirs in merge view |
+
+### Trouble
+
+Open with `<leader>xx` or `<leader>xq`.
+
+| Key | Action |
+| --- | --- |
+| `<CR>` / `o` | Open item |
+| `q` | Close |
+| `r` | Refresh |
+| `?` | Help |
+
+### Aerial
+
+Open with `<leader>co`.
+
+| Key | Action |
+| --- | --- |
+| `<CR>` / `o` | Jump to symbol |
+| `q` | Close |
+| `{` / `}` | Previous / next symbol |
+| `?` | Help |
+
+### DAP UI
+
+Open with `<leader>du` after DAP loads.
+
+| Key | Action |
+| --- | --- |
+| `<CR>` | Expand/collapse item or jump |
+| `o` | Open/expand item |
+| `q` | Close focused DAP UI window |
+
+### Neotest
+
+Open the summary with `<leader>ts`.
+
+| Key | Action |
+| --- | --- |
+| `<CR>` | Jump/run focused test depending on node |
+| `o` | Expand/collapse node |
+| `q` | Close summary |
+
+### Overseer
+
+Open the task list with `<leader>wt`.
+
+| Key | Action |
+| --- | --- |
+| `<CR>` | Open task action/details |
+| `q` | Close |
+| `?` | Help |
+
+### Sidekick
+
+Use `<leader>ar`, `<leader>ad`, and visual `<leader>aa` for configured prompts.
+
+| Key | Action | Mode |
+| --- | --- | --- |
+| `<C-B>` | Insert/open buffers context picker | normal, terminal |
+| `<C-F>` | Insert/open files context picker | normal, terminal |
+| `<C-P>` | Insert prompt/context | terminal |
+| `<C-Q>` | Enter terminal normal mode | terminal |
+| `<C-.>` | Hide terminal window | normal, terminal |
+| `<C-Z>` | Blur terminal and return to previous window | normal, terminal |
+| `q` | Hide terminal window | normal |
+| `<CR>` | Send Enter to terminal | normal |
+| `<C-H/J/K/L>` | Navigate Neovim windows when possible | terminal |
+
+## Commands
+
+These are intentionally command-driven.
 
 | Command | Purpose |
 | --- | --- |
 | `:Lazy` | Plugin manager |
 | `:Mason` | External Neovim tools |
-| `:checkhealth ad` | Local config health |
+| `:checkhealth cccvno1` | Local config health |
 | `:Copilot auth` | Authenticate Copilot |
 | `:TSManager` | Tree-sitter manager |
 | `:GrugFar` | Search and replace |
@@ -573,9 +418,9 @@ These are useful and intentionally left command-driven.
 | `:DapContinue` | Start/continue debug session |
 | `:LivePreviewToggle` | Toggle browser preview |
 
-## How To Discover More
+## Discover More
 
-Use these commands when something is unclear:
+Use these when a mapping is unclear:
 
 ```vim
 :map <leader>

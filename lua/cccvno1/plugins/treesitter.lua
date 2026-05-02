@@ -2,7 +2,14 @@ return {
   {
     "romus204/tree-sitter-manager.nvim",
     cmd = "TSManager",
-    opts = {},
+    event = { "BufReadPost", "BufNewFile" },
+    opts = function()
+      return {
+        ensure_installed = require("cccvno1.core.treesitter").parsers,
+        auto_install = false,
+        highlight = true,
+      }
+    end,
   },
   {
     "windwp/nvim-ts-autotag",
